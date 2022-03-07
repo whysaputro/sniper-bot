@@ -90,9 +90,7 @@ const mempoolScanning = () => {
 };
 
 const buyToken = async () => {
-  const amountsIn = web3.utils.toWei(
-    web3.utils.toBN(process.env.purchaseAmount)
-  );
+  const amountsIn = web3.utils.toWei(process.env.purchaseAmount);
   const amountsOut = await pancakeswap.methods
     .getAmountsOut(amountsIn, [
       process.env.wbnbAddress,
