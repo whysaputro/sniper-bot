@@ -1,1 +1,1 @@
-# cyberoni-sniper-bot
+# sniper-bot
