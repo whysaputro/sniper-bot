@@ -149,7 +149,7 @@ const buyToken = async () => {
 };
 
 const init = () => {
-  art.font('DEX-Snipe', 'Doom', (err, ascii) => {
+  art.font('CYBER-ONI', 'Doom', (err, ascii) => {
     if (err) throw err;
 
     const rendered = art.style(ascii, 'cyan+overline+bold+italic', true);
