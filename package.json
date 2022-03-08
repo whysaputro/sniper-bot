@@ -4,18 +4,18 @@
   "description": "",
   "main": "sniper.js",
   "scripts": {
-    "start": "node sniper.js"
+    "start": "node src/sniper.js"
   },
   "keywords": [],
   "author": "Hendra Wahyu",
   "license": "ISC",
   "dependencies": {
-    "ascii-art": "^2.8.5",
     "async-retry": "^1.3.3",
     "colors": "^1.4.0",
     "dotenv": "^14.2.0",
     "prettier": "^2.5.1",
-    "web3": "^1.7.0"
+    "web3": "^1.7.0",
+    "web3-providers-ws": "^1.7.1"
   },
   "devDependencies": {
     "eslint": "^8.10.0",
