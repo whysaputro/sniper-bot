@@ -4,7 +4,7 @@
   "description": "",
   "main": "sniper.js",
   "scripts": {
-    "snipe": "node -r dotenv/config src/bot.js"
+    "snipe": "node -r dotenv/config src/app.js"
   },
   "keywords": [],
   "author": "Hendra Wahyu",
