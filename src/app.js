@@ -2,10 +2,8 @@
 const Web3 = require('web3');
 const colors = require('colors/safe');
 const { Listr } = require('listr2');
-
-const PancakeRouterABI = require('./ABI/pancakeRouter.json');
-const BEP20ABI = require('./ABI/bep20.json');
 const { addLiquidityETH, addLiquidity } = require('./Utilities/AddLiquidityEvent');
+const { BEP20ABI, PancakeRouterABI } = require('./Utilities/ABI');
 
 const websocketOptions = {
   timeout: 30000, // ms
@@ -204,6 +202,7 @@ async function init() {
     },
     {
       title: 'Scanning mempool...',
+      skip: () => true,
       task: async (ctx, task) => {
         const txHash = await scanningMempool(ctx.tokenAddress);
         task.title = `${colors.green('Liquidity transaction detected in mempool:')} https://bscscan.com/tx/${txHash}`;
