@@ -1,4 +1,5 @@
 node_modules 
+/src/Test
 package-lock.json
 yarn.lock
 .env
