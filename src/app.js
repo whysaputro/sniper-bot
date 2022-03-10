@@ -1,6 +1,7 @@
 /* eslint-disable prefer-regex-literals, max-len, no-await-in-loop, no-underscore-dangle, no-param-reassign, no-shadow, eqeqeq */
 const Web3 = require('web3');
 const colors = require('colors/safe');
+const axios = require('axios');
 const { Listr } = require('listr2');
 const { addLiquidityETH, addLiquidity } = require('./Utilities/AddLiquidityEvent');
 const { BEP20ABI, PancakeRouterABI } = require('./Utilities/ABI');
@@ -32,6 +33,7 @@ const web3 = new Web3(websocket);
 const pancakeswap = new web3.eth.Contract(PancakeRouterABI, process.env.PANCAKE_ROUTER);
 const mempool = web3.eth.subscribe('pendingTransactions');
 
+web3.eth.Contract.handleRevert = true;
 web3.eth.accounts.wallet.add(process.env.PRIVATE_KEY);
 
 function approveToken(tokenAddress, amount) {
@@ -105,6 +107,23 @@ function buyTokenWithBNB(toToken, purchaseAmount) {
           .on('error', () => {
             reject(new Error('Snipping failed'));
           });
+      });
+  });
+}
+
+function honeyPotCheck(tokenAddress) {
+  return new Promise((resolve, reject) => {
+    axios.get('https://api.banditcoding.xyz/honeypot/', {
+      params: {
+        chain: 'bsc',
+        address: tokenAddress,
+      },
+    })
+      .then(({ data: { data } }) => {
+        resolve(data);
+      })
+      .catch((err) => {
+        reject(new Error(err));
       });
   });
 }
