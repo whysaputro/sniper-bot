@@ -3,7 +3,8 @@ const Web3 = require('web3');
 const colors = require('colors/safe');
 const axios = require('axios');
 const { Listr } = require('listr2');
-const { addLiquidityETH, addLiquidity } = require('./Utilities/AddLiquidityEvent');
+const banner = require('./libs/banner');
+const { addLiquidityETH, addLiquidity } = require('./Utilities/addLiquidityEvent');
 const { BEP20ABI, PancakeRouterABI } = require('./Utilities/ABI');
 
 const websocketOptions = {
@@ -163,15 +164,7 @@ function scanningMempool(tokenAddress) {
 }
 
 async function init() {
-  console.log(`${colors.blue(
-    `
- ██████╗██╗   ██╗██████╗ ███████╗██████╗        ██████╗ ███╗   ██╗██╗
-██╔════╝╚██╗ ██╔╝██╔══██╗██╔════╝██╔══██╗      ██╔═══██╗████╗  ██║██║
-██║      ╚████╔╝ ██████╔╝█████╗  ██████╔╝█████╗██║   ██║██╔██╗ ██║██║
-██║       ╚██╔╝  ██╔══██╗██╔══╝  ██╔══██╗╚════╝██║   ██║██║╚██╗██║██║
-╚██████╗   ██║   ██████╔╝███████╗██║  ██║      ╚██████╔╝██║ ╚████║██║
- ╚═════╝   ╚═╝   ╚═════╝ ╚══════╝╚═╝  ╚═╝       ╚═════╝ ╚═╝  ╚═══╝╚═╝`,
-  )}\n`);
+  banner.show();
 
   const tasks = new Listr([
     {
