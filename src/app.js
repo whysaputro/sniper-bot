@@ -4,7 +4,8 @@ const colors = require('colors/safe');
 const axios = require('axios');
 const { Listr } = require('listr2');
 const banner = require('./libs/banner');
-const { addLiquidityETH, addLiquidity } = require('./Utilities/addLiquidityEvent');
+const { addLiquidityETH, addLiquidity } = require('./Utilities/liquidityEvents');
+const { finalize } = require('./Utilities/pinkSaleEvent');
 const { BEP20ABI, PancakeRouterABI } = require('./Utilities/ABI');
 
 const websocketOptions = {
@@ -163,6 +164,54 @@ function scanningMempool(tokenAddress) {
   });
 }
 
+function scanningMempoolPresale(tokenAddress, presaleAddress) {
+  return new Promise((resolve, reject) => {
+    mempool.on('data', (txHash) => {
+      web3.eth.getTransaction(txHash, (error, transaction) => {
+        if (error) reject(new Error(error));
+
+        if (transaction && transaction.to === presaleAddress) {
+          if (finalize.hex.test(transaction.input)) {
+            web3.currentProvider.send({
+              method: 'trace_replayTransaction',
+              params: [transaction.hash, ['trace']],
+              jsonrpc: '2.0',
+              id: '1',
+            }, (err, { result: { trace: internalTxns } }) => {
+              if (err) reject(new Error(err));
+
+              internalTxns.forEach((internalTxn) => {
+                if (addLiquidityETH.hex.test(internalTxn.action.input)) {
+                  const decodedAddLiquidityETH = web3.eth.abi.decodeParameters(
+                    addLiquidityETH.parameters,
+                    internalTxn.action.input.slice(10),
+                  );
+
+                  if (decodedAddLiquidityETH.token.toLowerCase() == tokenAddress.toLowerCase()) {
+                    resolve(transaction.hash);
+                  }
+                }
+
+                if (addLiquidity.hex.test(internalTxn.action.input)) {
+                  const decodedAddLiquidity = web3.eth.abi.decodeParameters(
+                    addLiquidity.parameters,
+                    internalTxn.action.input.slice(10),
+                  );
+
+                  if (decodedAddLiquidity.tokenA.toLowerCase() == tokenAddress.toLowerCase()
+                    || decodedAddLiquidity.tokenB.toLowerCase() == tokenAddress.toLowerCase()) {
+                    resolve(transaction.hash);
+                  }
+                }
+              });
+            });
+          }
+        }
+      });
+    });
+  });
+}
+
 async function init() {
   banner.show();
 
@@ -241,7 +290,7 @@ async function init() {
     registerSignalListeners: false,
   });
 
-  tasks.run();
+  // tasks.run();
 }
 
 init();

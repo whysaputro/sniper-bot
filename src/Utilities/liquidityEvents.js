@@ -24,8 +24,4 @@ const addLiquidity = {
   ],
 };
 
-const finalize = {
-  hex: /^0x4bb278f3/,
-};
-
-module.exports = { addLiquidityETH, addLiquidity, finalize };
+module.exports = { addLiquidityETH, addLiquidity };
