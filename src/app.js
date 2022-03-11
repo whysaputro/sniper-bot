@@ -88,13 +88,12 @@ function buyTokenWithBNB(toToken, purchaseAmount) {
     pancakeswap.methods.getAmountsOut(amountsIn, [process.env.WBNB_ADDRESS, toToken]).call({ from: process.env.WALLET_ADDRESS })
       .then((amountsOut) => {
         const amountsOutMin = web3.utils.toBN(amountsOut[1] * (1 - process.env.SLIPPAGE / 100));
-        pancakeswap.methods
-          .swapExactETHForTokens(
-            amountsOutMin,
-            [process.env.WBNB_ADDRESS, toToken],
-            process.env.WALLET_ADDRESS,
-            Date.now() + 1000 * 60 * process.env.DEADLINE,
-          )
+        pancakeswap.methods.swapExactETHForTokens(
+          amountsOutMin,
+          [process.env.WBNB_ADDRESS, toToken],
+          process.env.WALLET_ADDRESS,
+          Date.now() + 1000 * 60 * process.env.DEADLINE,
+        )
           .send({
             from: process.env.WALLET_ADDRESS,
             value: web3.utils.toWei(String(purchaseAmount), 'ether'),
