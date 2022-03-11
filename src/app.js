@@ -220,7 +220,6 @@ async function init() {
     },
     {
       title: 'Scanning mempool...',
-      skip: () => true,
       task: async (ctx, task) => {
         const txHash = await scanningMempool(ctx.tokenAddress);
         task.title = `${colors.green('Liquidity transaction detected in mempool:')} https://bscscan.com/tx/${txHash}`;
