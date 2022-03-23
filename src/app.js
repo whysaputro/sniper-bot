@@ -65,7 +65,7 @@ function buyToken(fromToken, toToken, purchaseAmount) {
         const amountsOutMin = web3.utils.toBN(amountsOut[1] * (1 - process.env.SLIPPAGE / 100));
 
         checkTokenTax(toToken).then((tax) => {
-          if (tax.buyTax > 20 ) {
+          if (tax.buyTax > process.env.BUY_TAX ) {
             reject(new Error('Buy tax more than expected'));
           }
         })
@@ -99,7 +99,7 @@ function buyTokenWithBNB(toToken, purchaseAmount) {
         const amountsOutMin = web3.utils.toBN(amountsOut[1] * (1 - process.env.SLIPPAGE / 100));
 
         checkTokenTax(toToken).then((tax) => {
-          if (tax.buyTax > 20 ) {
+          if (tax.buyTax > process.env.BUY_TAX ) {
             reject(new Error('Buy tax more than expected'));
           }
         })
@@ -332,7 +332,7 @@ async function init() {
     });
 
     await initializeTask.run({ ctx });
-    
+
     await snipeTokenTask.run({ ctx })
     .then(() => {
       process.exit(0);
