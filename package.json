@@ -4,12 +4,15 @@
   "description": "",
   "main": "app.js",
   "scripts": {
+    "lint": "yarn eslint src/**/*.js",
+    "lint:fix": "yarn eslint src/**/*.js --fix",
     "snipe": "node -r dotenv/config src/app.js"
   },
   "keywords": [],
   "author": "Hendra Wahyu",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.26.1",
     "colors": "^1.4.0",
     "dotenv": "^14.2.0",
     "enquirer": "^2.3.6",
